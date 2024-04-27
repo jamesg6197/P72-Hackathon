@@ -35,3 +35,16 @@ For food availability, we can treat this as a game theory problem. Each food ven
 <p align="center">
 <img src="https://github.com/bsun1220/cubist_info/blob/main/images/top.png" alt="drawing" width="300"/>
 </p>
+
+# Setting up the webapp
+
+```
+git clone https://github.com/jamesg6197/P72-Hackathon.git
+cd P72-Hackathon
+pip install -r requirements.txt # install dependencies
+python manage.py makemigrations #generate data models
+python manage.py migrate
+python manage.py csp_background #run csp realtime streaming in the background to populate database asynchronously
+python manage.py runserver #start webapp server
+
+```
