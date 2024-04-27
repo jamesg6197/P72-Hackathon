@@ -1,4 +1,4 @@
-# FoodVendor
+# VendorMap
 
 One iconic feature of New York are its food vendors lining the streets in busy areas. However, there is an issue where food vendors are distributed inefficiently. Many vendors may flock to one popular area, completing neglecting another popular area. For example, today, 8 similar food carts were spotted in Herald Square while significantly fewer seen near Bryant Park, while another day it is more even.
 
@@ -7,7 +7,7 @@ One iconic feature of New York are its food vendors lining the streets in busy a
 <img src="https://github.com/bsun1220/cubist_info/blob/main/images/example.png" alt="drawing" width="600"/>
 </p>
 
-We propose an app **FoodVendor** to promote business cooperation and efficiency. A vendor can check **FoodVendor** to check where they go for the day. When they have decided on a location, they can indicate this so other vendors are better prepared. This creates a network effect where more vendors will join the app so there is greater accuracy for everyone.
+We propose an app **VendorMap** to promote business cooperation and efficiency. A vendor can check **VendorMap** to check where they go for the day. When they have decided on a location, they can indicate this so other vendors are better prepared. This creates a network effect where more vendors will join the app so there is greater accuracy for everyone.
 
 <p align="center">
 <img src="https://github.com/bsun1220/cubist_info/blob/main/images/logo.png" alt="drawing" width="300"/>
