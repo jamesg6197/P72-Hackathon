@@ -3,39 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regional Activity Report</title>
+    <title>Profit View</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
+        .container {
+            display: flex;
+            width: 100%;
         }
-        .region-list {
-            list-style: none;
-            padding: 0;
+        .list, .map {
+            width: 50%;
         }
-        .region-list li {
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            margin-top: 5px;
-            padding: 10px;
-            border-radius: 5px;
+        .list {
+            padding: 20px;
         }
-        .region-list li:hover {
-            background-color: #e9e9e9;
-        }
-        .header {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="header">Top Active Regions</div>
-    <ul class="region-list">
-        {% for region, rank in regions %}
-        <li>{{ rank }}: {{ region }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <div class="list">
+            <h2>Region Rankings</h2>
+            <ol>
+                {% for region, rank, score in regions %}
+                <li>{{ region }} - Rank: {{ rank }} - Score: {{ score }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="map">
+            {{ map_html | safe }}
+        </div>
+    </div>
 </body>
 </html>

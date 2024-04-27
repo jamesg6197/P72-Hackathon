@@ -118,8 +118,8 @@ def make_heat_map(x: ts[pd.DataFrame]):
         # Create a new HeatmapData object and save to the database
 
     # Add heatmap layer to the map
-    HeatMap(heat_data).add_to(map)
-    map.save(f'{os.getcwd()}/vendor_backend/html_forms/heatmap.html')
+    # HeatMap(heat_data).add_to(map)
+    # map.save(f'{os.getcwd()}/vendor_backend/html_forms/heatmap.html')
 
         
 @csp.graph
