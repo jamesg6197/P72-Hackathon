@@ -19,9 +19,13 @@ from django.urls import path
 from vendor_backend.views import *
 
 urlpatterns = [
-    path('signup/', SignUpView.as_view(), name='signup'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('api/heatmap/', HeatmapAPIView.as_view(), name = 'heatmap')
+    path('signup/', register_user, name='signup'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'),
+    path('api/heatmap/', HeatmapAPIView.as_view(), name = 'heatmap'),
+    path('api/profit_ranking', ProfitView.as_view(), name = 'profit_ranking'),
+    path('', home, name = 'home'),
+    path('goto/', store_station, name = "store station")
+    
 ]
 

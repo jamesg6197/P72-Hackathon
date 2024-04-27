@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Activity Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .region-list {
+            list-style: none;
+            padding: 0;
+        }
+        .region-list li {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .region-list li:hover {
+            background-color: #e9e9e9;
+        }
+        .header {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Top Active Regions</div>
+    <ul class="region-list">
+        {% for region, rank in regions %}
+        <li>{{ rank }}: {{ region }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

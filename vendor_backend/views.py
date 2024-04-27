@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth import login, logout
-from .forms import SignUpForm, LoginForm
+from django.contrib.auth import login, logout, authenticate
+from .forms import RegisterUserForm, StationForm
+import os
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,7 +12,16 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import HttpResponse
 from django.utils import timezone
 from datetime import timedelta
-from .models import ActivityHeatmapData
+from .models import ActivityHeatmapData, RegionalDataHeatmap, GotoLocationRequest
+from django.contrib import messages
+
+from django.views import View
+from django.http import HttpResponse
+
+from django.shortcuts import render
+from django.utils import timezone
+from datetime import timedelta
+
 
 import folium
 from folium.plugins import HeatMap
@@ -45,31 +55,80 @@ class HeatmapAPIView(APIView):
         map_html = map._repr_html_()
 
         return HttpResponse(map_html, content_type='text/html')
-    
-class SignUpView(generic.CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-    template_name = 'vendor_backend/html_forms/signup.html'
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home')
+def login_user(request):
+	if request.method == "POST":
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			login(request, user)
+			return redirect('home')
+		else:
+			messages.success(request, ("There Was An Error Logging In, Try Again..."))	
+			return redirect('login')	
 
-class LoginView(generic.FormView):
-    form_class = LoginForm
-    success_url = reverse_lazy('home')
-    template_name = 'vendor_backend/html_forms/login.html'
 
-    def form_valid(self, form):
-        login(self.request, form.get_user())
-        return super().form_valid(form)
-    
+	else:
+		return render(request, 'login.html', {})
 
-def logout_view(request):
-    logout(request)
-    return redirect('login')
+def logout_user(request):
+	logout(request)
+	messages.success(request, ("You Were Logged Out!"))
+	return redirect('')
 
+
+def store_station(request):
+    if request.method == 'POST':
+        form = StationForm(request.POST)
+        if form.is_valid():
+            selected_option = form.cleaned_data['stations']
+            GotoLocationRequest.objects.create(region = selected_option)
+            return HttpResponse('Success!')
+    else:
+        form = StationForm()
+    return render(request, 'gotorequest.html', {'form': form})
+
+def register_user(request):
+	if request.method == "POST":
+		form = RegisterUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			user = authenticate(username=username, password=password)
+			login(request, user)
+			messages.success(request, ("Registration Successful!"))
+			return redirect('')
+	else:
+		form = RegisterUserForm()
+
+	return render(request, f'signup.html', {
+		'form':form,
+		})
+
+def home(request):
+    # Add any context data you need to pass to the template here
+    context = {}
+    return render(request, 'home.html', context)
+class ProfitView(View):
+    def get(self, request):
+        now = timezone.now()
+        one_hour_ago = now - timedelta(minutes=60)
+        data = RegionalDataHeatmap.objects.filter(timestamp__gte=one_hour_ago).values('region', 'total_activity')
+        
+        region_total = {}
+        for d in data:
+            region = d['region']
+            activity = d['total_activity']
+            if region not in region_total:
+                region_total[region] = 0
+            region_total[region] += activity
+        
+        sorted_list = sorted(region_total.items(), key=lambda x: -x[1])
+        regions = [(region, idx + 1) for idx, (region, _) in enumerate(sorted_list)]
+        
+        return render(request, 'profit_view.html', {'regions': regions})
 
 
 

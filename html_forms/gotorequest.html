@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dropdown Menu</title>
+    </head>
+    <body>
+        <h2>Select an Option:</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Store Selection</button>
+        </form>
+
+        <script>
+            function submitForm() {
+                var dropdown = document.getElementById("stations")
+                var selectedOption = dropdown.value;
+
+                console.log("selected", selectedOption);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/store-station/', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('Station stored successfully.');
+                    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                        console.error('Failed to store station.');
+                    }
+                };
+                xhr.send('selectedStation=' + encodeURIComponent(selectedOption));
+            }
+        </script>
+    </body>
+</html>%   

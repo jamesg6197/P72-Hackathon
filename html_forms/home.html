@@ -1,0 +1,69 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        .header {
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .nav {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .nav a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .nav a:hover {
+            background-color: #555;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #0073e6;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Welcome to Our Website!
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/login/">Login</a>
+        <a href="/signup/">Register</a>
+        <a href="/api/heatmap">Heatmap</a>
+        <a href="/api/profit_ranking">Current Profit Ranking</a>
+        <a href="goto/"> Send Where You're Going!</a>
+    </div>
+    <div class="content">
+        <h1>Hello, Visitor!</h1>
+        <p>Explore what we have to offer. Our site provides a range of services designed to help you.</p>
+    </div>
+</body>
+</html>

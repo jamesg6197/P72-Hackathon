@@ -11,7 +11,7 @@ import numpy as np
 
 from datetime import datetime, timedelta
 from .urls import CITIBIKE_STATION_INFORMATION, CITIBIKE_STATION_STATUS
-from .models import ActivityHeatmapData
+from .models import ActivityHeatmapData, RegionalDataHeatmap
 
 from .latlon import NYC_LOCATIONS
 
@@ -54,7 +54,9 @@ def poll_data(interval: timedelta) -> ts[pd.DataFrame]:
         # schedule next poll in `interval`
         csp.schedule_alarm(a_poll, interval, True)
         return to_return
-    
+
+def find_closest_region(lat, lon, regions_dict):
+    return min(regions_dict.keys(), key=lambda x: np.sqrt((regions_dict[x][0] - lat)**2 + (regions_dict[x][1] - lon)**2)) 
 @csp.node
 def diff_(x: ts[pd.DataFrame], x_delay: ts[pd.DataFrame]) -> ts[pd.DataFrame]:
     if csp.ticked(x) and csp.valid(x, x_delay):
@@ -65,8 +67,11 @@ def diff_(x: ts[pd.DataFrame], x_delay: ts[pd.DataFrame]) -> ts[pd.DataFrame]:
         data_with_diffs["rounded_lon"] = data_with_diffs["lon"].round(1)
         data_with_diffs["rounded_lat"] = data_with_diffs["lat"].round(1)
 
-        def find_closest_region(lat, lon, regions_dict):
-            return min(regions_dict.keys(), key=lambda x: np.sqrt((regions_dict[x][0] - lat)**2 + (regions_dict[x][1] - lon)**2))
+       
+
+        data_with_diffs['region'] = current_capacity_data.apply(lambda row: find_closest_region(row['lat'], row['lon'], NYC_LOCATIONS), axis=1)
+
+
 
         data_with_diffs = data_with_diffs.groupby(['rounded_lat', 'rounded_lon']).apply(
             lambda x: x.nlargest(50, 'capacity')
@@ -85,6 +90,21 @@ def make_heat_map(x: ts[pd.DataFrame]):
     map = folium.Map(location=map_center, zoom_start=9)
     heat_data = []
     current_time = datetime.utcnow()
+
+    regional_data = x.groupby(["region"]).agg(
+        {
+            "num_bike_diff": "sum"
+        }
+    ).reset_index()
+    regional_data = regional_data.rename(columns = {"num_bike_diff": "total_activity"})
+    for _, row in regional_data.iterrows():
+        print(row)
+        RegionalDataHeatmap.objects.create(
+            region = row["region"],
+            total_activity = row["total_activity"],
+            #total_profitability = 0,
+        )
+
     for _, row in x.iterrows():
         # Append to heatmap data list for folium
         heat_data.append([row['lat'], row['lon'], row['num_bike_diff']])
