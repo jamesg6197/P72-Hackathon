@@ -5,15 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profit View</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Improved font for better readability */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh; /* Full viewport height */
+            background-color: #f5f5f5; /* Light grey background */
+        }
         .container {
             display: flex;
             width: 100%;
-        }
-        .list, .map {
-            width: 50%;
+            overflow: hidden; /* Prevents any spillover from the container */
         }
         .list {
             padding: 20px;
+            background-color: #ffffff; /* White background for the list */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            width: 50%; /* Adjust width to 50% of the container */
+            overflow-y: auto; /* Enables scrolling on overflow */
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 15px; /* More space below the heading */
+        }
+        ol {
+            padding: 0 20px;
+        }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee; /* Light line under each item for separation */
+            list-style-type: none; /* No bullet points */
+            margin: 5px 0;
+            font-size: 16px; /* Larger font size for readability */
+        }
+        li:last-child {
+            border-bottom: none; /* Removes bottom border from the last item */
+        }
+        .map {
+            width: 50%; /* Maintains 50% width */
         }
         iframe {
             width: 100%;
